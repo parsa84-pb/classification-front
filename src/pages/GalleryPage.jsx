@@ -64,7 +64,7 @@ const GalleryPage = () => {
                   <div style={{ height: '180px', overflow: 'hidden', backgroundColor: '#fafafa', display: 'flex', alignItems: 'center' }}>
                     <img
                       alt="Analyzed Capture"
-                      src={item.frame_image}
+                      src={video.frame_image.startsWith('http') ? video.frame_image : `${baseURL}${video.frame_image}`}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s' }}
                       onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.06)'}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}

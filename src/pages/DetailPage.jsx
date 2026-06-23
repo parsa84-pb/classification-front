@@ -56,7 +56,7 @@ const DetailPage = () => {
         <Col xs={24} md={12}>
           <Card bordered={false} style={{ background: '#fafafa', borderRadius: '16px', overflow: 'hidden', textAlign: 'center', padding: '10px' }}>
             <img 
-              src={frameData.frame_image} 
+              src={frameData.frame_image ? (frameData.frame_image.startsWith('http') ? frameData.frame_image : `${baseURL}${frameData.frame_image}`) : ''}
               alt="Analysis Core" 
               style={{ maxWidth: '100%', maxHeight: '420px', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }} 
             />
