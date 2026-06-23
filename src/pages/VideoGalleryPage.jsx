@@ -26,7 +26,6 @@ const VideoGalleryPage = () => {
     fetchVideos();
   }, []);
 
-  // Shared function to handle redirecting to workspace
   const handleLoadVideo = (vid) => {
     navigate('/', { state: { predefinedVideo: vid } });
   };
@@ -60,21 +59,18 @@ const VideoGalleryPage = () => {
               <Card
                 hoverable
                 style={{ borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}
-                // Click anywhere on the card executes the load action!
                 onClick={() => handleLoadVideo(vid)}
                 cover={
                   <div style={{ height: '180px', backgroundColor: '#000', overflow: 'hidden', position: 'relative' }}>
                     <video
-                      src={videoData.url ? (videoData.url.startsWith('http') ? videoData.url : `${baseURL}${videoData.url}`) : ''}
+                      src={vid.url ? (vid.url.startsWith('http') ? vid.url : `${baseURL}${vid.url}`) : ''}
                       muted
                       loop
                       preload="metadata"
-                      // Plays the video preview on hover (starts from second 0.1 to avoid a black screen frame)
                       onMouseEnter={(e) => {
                         e.currentTarget.currentTime = 0.1;
                         e.currentTarget.play().catch(err => console.log("Playback prevented"));
                       }}
-                      // Pauses and resets when mouse leaves
                       onMouseLeave={(e) => {
                         e.currentTarget.pause();
                         e.currentTarget.currentTime = 0.1;
