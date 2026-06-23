@@ -65,7 +65,7 @@ const VideoGalleryPage = () => {
                 cover={
                   <div style={{ height: '180px', backgroundColor: '#000', overflow: 'hidden', position: 'relative' }}>
                     <video
-                      src={vid.url}
+                      src={videoData.url ? (videoData.url.startsWith('http') ? videoData.url : `${baseURL}${videoData.url}`) : ''}
                       muted
                       loop
                       preload="metadata"

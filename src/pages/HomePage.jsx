@@ -149,7 +149,7 @@ const HomePage = () => {
         <Card title="Video Workspace" bordered={false}>
           <video
             ref={videoRef}
-            src={videoData.url}
+            src={videoData.url ? (videoData.url.startsWith('http') ? videoData.url : `${baseURL}${videoData.url}`) : ''}
             controls
             style={{
               width: "100%",
