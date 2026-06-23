@@ -5,6 +5,7 @@ import { ArrowLeftOutlined, BarChartOutlined, ClockCircleOutlined, LinkOutlined 
 import axios from 'axios';
 
 const { Title, Paragraph, Text } = Typography;
+const baseURL = import.meta.env.VITE_API_BASE_URL || '';
 
 const DetailPage = () => {
   const { frameId } = useParams();

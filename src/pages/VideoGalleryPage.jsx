@@ -5,6 +5,7 @@ import { VideoCameraOutlined, CalendarOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { Title, Paragraph } = Typography;
+const baseURL = import.meta.env.VITE_API_BASE_URL || '';
 
 const VideoGalleryPage = () => {
   const [videos, setVideos] = useState([]);

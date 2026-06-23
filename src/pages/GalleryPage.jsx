@@ -5,6 +5,7 @@ import { EyeOutlined, CalendarOutlined, PictureOutlined } from '@ant-design/icon
 import axios from 'axios';
 
 const { Title, Paragraph } = Typography;
+const baseURL = import.meta.env.VITE_API_BASE_URL || '';
 
 const GalleryPage = () => {
   const [frames, setFrames] = useState([]);

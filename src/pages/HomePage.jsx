@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const { Title, Paragraph } = Typography;
 const { Dragger } = Upload;
+const baseURL = import.meta.env.VITE_API_BASE_URL || '';
 
 const HomePage = () => {
   const location = useLocation();
