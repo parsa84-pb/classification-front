@@ -27,7 +27,7 @@ const baseURL = import.meta.env.VITE_API_BASE_URL || "";
 
 const HomePage = () => {
   const location = useLocation();
-  // State management
+
   const [videoUrl, setVideoUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [videoData, setVideoData] = useState(null);
@@ -47,7 +47,6 @@ const HomePage = () => {
     }
   }, [location.state]);
 
-  // Handle Video Download
   const handleDownload = async () => {
     if (!videoUrl) return message.warning("Please enter an URL!");
     setIsLoading(true);
@@ -68,13 +67,13 @@ const HomePage = () => {
     }
   };
 
-  // Handle Frame Extraction from Video
   const handleProcessFrame = async () => {
     if (!videoRef.current || !videoData) return;
     setIsProcessing(true);
     setAiResult(null);
     try {
-      const response = await axios.post(`${baseURL}/api/video/download/`, {
+      // FIX: Changed endpoint to /api/frame/process/ and adjusted payload names
+      const response = await axios.post(`${baseURL}/api/frame/process/`, {
         video_id: videoData.id,
         timestamp: videoRef.current.currentTime,
       });
@@ -87,12 +86,11 @@ const HomePage = () => {
     }
   };
 
-  // Handle Direct Image Upload & Classification
   const handleImageUpload = async (options) => {
     const { file } = options;
     setIsProcessing(true);
     setAiResult(null);
-    setPreviewImage(URL.createObjectURL(file)); // Show local preview instantly
+    setPreviewImage(URL.createObjectURL(file));
 
     const formData = new FormData();
     formData.append("image", file);
@@ -114,7 +112,6 @@ const HomePage = () => {
     }
   };
 
-  // Tabs Configuration
   const tabItems = [
     {
       key: "1",
@@ -149,7 +146,13 @@ const HomePage = () => {
         <Card title="Video Workspace" bordered={false}>
           <video
             ref={videoRef}
-            src={videoData.url ? (videoData.url.startsWith('http') ? videoData.url : `${baseURL}${videoData.url}`) : ''}
+            src={
+              videoData.url
+                ? videoData.url.startsWith("http")
+                  ? videoData.url
+                  : `${baseURL}${videoData.url}`
+                : ""
+            }
             controls
             style={{
               width: "100%",
@@ -159,7 +162,7 @@ const HomePage = () => {
           />
           <Button
             type="primary"
-            danger
+            disabled={isProcessing}
             block
             size="large"
             icon={<AimOutlined />}
@@ -236,7 +239,6 @@ const HomePage = () => {
       </div>
 
       <Row gutter={[24, 24]}>
-        {/* Left Workspace: Tabs for Video or Image */}
         <Col xs={24} md={14}>
           <Tabs
             defaultActiveKey="1"
@@ -250,7 +252,6 @@ const HomePage = () => {
           />
         </Col>
 
-        {/* Right Workspace: AI Predictions */}
         <Col xs={24} md={10} style={{ marginTop: "40px" }}>
           <Card
             title="AI Ensemble Analysis"
