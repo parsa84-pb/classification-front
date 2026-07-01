@@ -19,11 +19,10 @@ import {
   InboxOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
-import axios from "axios";
+import api from "../api";
 
 const { Title, Paragraph } = Typography;
 const { Dragger } = Upload;
-const baseURL = import.meta.env.VITE_API_BASE_URL || "";
 
 const HomePage = () => {
   const location = useLocation();
@@ -37,6 +36,8 @@ const HomePage = () => {
 
   const videoRef = useRef(null);
 
+  const baseURL = import.meta.env.VITE_API_BASE_URL || "";
+
   React.useEffect(() => {
     if (location.state?.predefinedVideo) {
       const vid = location.state.predefinedVideo;
@@ -48,11 +49,12 @@ const HomePage = () => {
   }, [location.state]);
 
   const handleDownload = async () => {
-    if (!videoUrl) return message.warning("Please enter an URL!");
+    if (!videoUrl) return message.warning("Please enter a URL!");
     setIsLoading(true);
     setAiResult(null);
+    const baseURL = import.meta.env.VITE_API_BASE_URL || "";
     try {
-      const response = await axios.post(`${baseURL}/api/video/download/`, {
+      const response = await api.post(`${baseURL}/api/video/download/`, {
         url: videoUrl,
       });
       setVideoData({
@@ -61,7 +63,7 @@ const HomePage = () => {
       });
       message.success("Video loaded successfully!");
     } catch (error) {
-      message.error("Failed to download video.");
+      message.error(error.response?.data?.error || "Failed to download video.");
     } finally {
       setIsLoading(false);
     }
@@ -72,15 +74,14 @@ const HomePage = () => {
     setIsProcessing(true);
     setAiResult(null);
     try {
-      // FIX: Changed endpoint to /api/frame/process/ and adjusted payload names
-      const response = await axios.post(`${baseURL}/api/frame/process/`, {
+      const response = await api.post("/api/frame/process/", {
         video_id: videoData.id,
         timestamp: videoRef.current.currentTime,
       });
       setAiResult(response.data.predictions);
       message.success("Frame analyzed successfully!");
     } catch (error) {
-      message.error("AI processing failed.");
+      message.error(error.response?.data?.error || "AI processing failed.");
     } finally {
       setIsProcessing(false);
     }
@@ -96,17 +97,13 @@ const HomePage = () => {
     formData.append("image", file);
 
     try {
-      const response = await axios.post(
-        `${baseURL}/api/image/classify/`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        },
-      );
+      const response = await api.post("/api/image/classify/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       setAiResult(response.data.predictions);
       message.success("Image classified successfully!");
     } catch (error) {
-      message.error("Failed to classify image.");
+      message.error(error.response?.data?.error || "Failed to classify image.");
     } finally {
       setIsProcessing(false);
     }
@@ -272,7 +269,7 @@ const HomePage = () => {
                 style={{
                   textAlign: "center",
                   color: "#999",
-                  paddingTop: "100px",
+                  padding: "100px",
                 }}
               >
                 <AimOutlined

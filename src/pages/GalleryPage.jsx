@@ -6,7 +6,7 @@ import {
   CalendarOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
-import axios from "axios";
+import api from "../api";
 
 const { Title, Paragraph } = Typography;
 const baseURL = import.meta.env.VITE_API_BASE_URL || "";
@@ -15,12 +15,12 @@ const GalleryPage = () => {
   const [frames, setFrames] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const baseURL = import.meta.env.VITE_API_BASE_URL || "";
 
-  // Fetch all items from Django
   useEffect(() => {
     const fetchFrames = async () => {
       try {
-        const response = await axios.get(`${baseURL}/api/frames/`);
+        const response = await api.get(`${baseURL}/api/frames/`);
         setFrames(response.data);
       } catch (error) {
         console.error("Error fetching gallery:", error);
@@ -41,7 +41,6 @@ const GalleryPage = () => {
 
   return (
     <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-      {/* Page Header */}
       <div
         style={{
           marginBottom: "40px",
@@ -59,14 +58,12 @@ const GalleryPage = () => {
         </Paragraph>
       </div>
 
-      {/* Empty State if no data */}
       {frames.length === 0 ? (
         <Empty
           description="No analyzed items found yet. Go back and process some images or videos!"
           style={{ padding: "60px 0" }}
         />
       ) : (
-        // Clean Grid Layout
         <Row gutter={[24, 24]}>
           {frames.map((item) => (
             <Col xs={24} sm={12} md={8} lg={6} key={item.id}>
